@@ -32,6 +32,7 @@ public class DynamicBody {
 	public void update(float delta) {
 		Vector2 futurePos = _position.cpy();
 		if (_movementType == MovementType.MOVEMENT_DYNAMIC) {
+			_velocity.add(_acceleration.cpy().scl(delta));
 			futurePos.add(_velocity.cpy().scl(delta));
 		} else if (_movementType == MovementType.MOVEMENT_CONSTANT) {
 			futurePos.add(_constDirection.nor().scl(_constSpeed * delta));
@@ -40,6 +41,17 @@ public class DynamicBody {
 		}
 		_position = boundariesCollision(futurePos);
 		_hitCircle.setPosition(_position);
+	}
+	
+	public void reset() {
+		_hitCircle.radius = 0.0f;
+		_position.setZero();
+		_velocity.setZero();
+		_acceleration.setZero();
+		_displacement.setZero();
+		_constDirection.setZero();
+		_constSpeed = 0.0f;
+		_angle = 0.0f;
 	}
 	
 	private Vector2 boundariesCollision(Vector2 futurePos) {
@@ -104,6 +116,10 @@ public class DynamicBody {
 		_velocity = velocity;
 	}
 	
+	public void setVelocity(float x, float y) {
+		_velocity.set(x, y);
+	}
+	
 	public void setConstSpeed(float constSpeed) {
 		_constSpeed = constSpeed;
 	}
@@ -114,6 +130,10 @@ public class DynamicBody {
 	
 	public void setAcceleration(Vector2 acceleration) {
 		_acceleration = acceleration;
+	}
+	
+	public void setAcceleration(float x, float y) {
+		_acceleration.set(x, y);
 	}
 	
 	public void setSpeed(float speed) {

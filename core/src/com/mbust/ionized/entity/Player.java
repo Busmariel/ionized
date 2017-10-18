@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mbust.ionized.Config;
 import com.mbust.ionized.Utility;
+import com.mbust.ionized.entity.bullet.Bullet;
 import com.mbust.ionized.screen.GameScreen;
 
 public class Player extends Character {
@@ -48,6 +49,8 @@ public class Player extends Character {
 	}
 
 	public void onInputShoot() { 
-		_gameScreen().getCurrentLevel()
+		Bullet bullet = _gameScreen.getCurrentLevel().spawnBullet(getPosition());
+		bullet.setRadius(10.0f);
+		bullet.setAcceleration(0.0f, 556.0f);
 	}
 }

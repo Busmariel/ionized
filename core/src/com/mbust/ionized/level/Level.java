@@ -1,5 +1,6 @@
 package com.mbust.ionized.level;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.mbust.ionized.entity.bullet.Bullet;
@@ -14,7 +15,7 @@ public class Level {
     private final Pool<Bullet> _bulletPool = new Pool<Bullet>() {
 		@Override
 		protected Bullet newObject() {
-			return new Bullet(null);
+			return new Bullet(_gameScreen);
 		}
     };
     
@@ -29,12 +30,16 @@ public class Level {
 			bullet.render(delta);
 		}
 	}
-
-	public Bullet spawnBullet(float x, float y) {
+	
+	public Bullet spawnBullet(Vector2 origin) {
         Bullet item = _bulletPool.obtain();
-        item.init(x, y);
+        item.init(origin.x, origin.y);
         _activeBullets.add(item);
 		return item;
+	}
+	
+	public Bullet spawnBullet(float x, float y) {
+		return spawnBullet(new Vector2(x, y));
 	}
 	
 	public void freeDeadBullets() {
