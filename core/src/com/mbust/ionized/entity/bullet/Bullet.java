@@ -13,19 +13,21 @@ public class Bullet extends DynamicBody implements Poolable {
 	public Bullet(GameScreen gameScreen) {
 		//super(position, radius);
 		_gameScreen = gameScreen;
-		setMovementType(MovementType.MOVEMENT_DYNAMIC);
+	
 		_alive = false;
 	}
 	
 	public void init(float x, float y) {
 		setPosition(x, y);
 		_alive = true;
+		setMovementType(MovementType.MOVEMENT_DYNAMIC);
+		setBoundariesCollision(false);
 	}
 
 	
 	public void render(float delta) {
 		super.update(delta);
-		_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y +  getPosition().y, getHitCircle().radius);
+		_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, getHitCircle().radius);
 		if (isOutOfScreen()) {
 			_alive = false;
 		}

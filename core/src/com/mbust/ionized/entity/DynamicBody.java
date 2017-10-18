@@ -11,14 +11,16 @@ public class DynamicBody {
 	public class MovementType {
 		public static final int MOVEMENT_DYNAMIC = 0, MOVEMENT_CONSTANT = 1, MOVEMENT_DISPLACEMENT = 2;
 	}
-	private int _movementType = 0;
+	private int _movementType;
 	private Vector2 _position, _velocity, _acceleration, _displacement, _constDirection;
 	private Circle _hitCircle;
 	private float _angle, _constSpeed;
+	private boolean _collidesWithBoundaries;
 
 	// arreglar deltas velocidades c
 	
 	public DynamicBody() {
+		_movementType = MovementType.MOVEMENT_DYNAMIC;
 		_hitCircle = new Circle();
 		_position = new Vector2();
 		_velocity = new Vector2();
@@ -27,6 +29,7 @@ public class DynamicBody {
 		_constDirection = new Vector2();
 		_constSpeed = 0.0f;
 		_angle = 0.0f;
+		_collidesWithBoundaries = true;
 	}
 	
 	public void update(float delta) {
@@ -39,11 +42,18 @@ public class DynamicBody {
 		} else if (_movementType == MovementType.MOVEMENT_DISPLACEMENT) {
 			futurePos.add(_displacement);
 		}
-		_position = boundariesCollision(futurePos);
+		
+		if (_collidesWithBoundaries) {
+			_position = boundariesCollision(futurePos);
+		} else {
+			_position = futurePos;
+		}
+		
 		_hitCircle.setPosition(_position);
 	}
 	
 	public void reset() {
+		_collidesWithBoundaries = true;
 		_hitCircle.radius = 0.0f;
 		_position.setZero();
 		_velocity.setZero();
@@ -65,10 +75,10 @@ public class DynamicBody {
 	
 	public boolean isOutOfScreen() {
 		// Check for collision with the game area boundaries
-		if (_position.x - _hitCircle.radius <= 0) return true;
-		if (_position.y - _hitCircle.radius <= 0) return true;
-		if (_position.x + _hitCircle.radius >= Config.gameAreaWidth) return true;
-		if (_position.y + _hitCircle.radius >= Config.gameAreaHeight) return true;
+		if (_position.x + _hitCircle.radius <= 0) return true;
+		if (_position.y + _hitCircle.radius <= 0) return true;
+		if (_position.x - _hitCircle.radius >= Config.gameAreaWidth) return true;
+		if (_position.y - _hitCircle.radius >= Config.gameAreaHeight) return true;
 		return false;
 	}
 
@@ -154,5 +164,10 @@ public class DynamicBody {
 	
 	public Circle getHitCircle() {
 		return _hitCircle;
+	}
+	
+	// Sets whether the body collides with the boundaries (true by default)
+	public void setBoundariesCollision(boolean value) {
+		_collidesWithBoundaries = value;
 	}
 }

@@ -19,6 +19,7 @@ public class GameScreen implements Screen {
 	private GameClass _gameClass;
 	private Level _currentLevel;
 	private Player _player;
+	private long _time;
 
 	
 	public GameScreen(GameClass gameClass) {
@@ -31,13 +32,14 @@ public class GameScreen implements Screen {
 		_currentLevel = new Level(this);
 		_player = new Player(this);
 		_player.setPosition(Utility.gANPos(0.5f, 0.1f));
+		_time = 0;
 	}
 
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+		_time++;
 		_sr.setColor(Color.WHITE);
 		
 		// Rectangulo del area de juego
@@ -86,5 +88,9 @@ public class GameScreen implements Screen {
 	
 	public Level getCurrentLevel() {
 		return _currentLevel;
+	}
+	
+	public long getTime() {
+		return _time;
 	}
 }

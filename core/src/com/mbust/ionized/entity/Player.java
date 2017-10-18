@@ -51,6 +51,6 @@ public class Player extends Character {
 	public void onInputShoot() { 
 		Bullet bullet = _gameScreen.getCurrentLevel().spawnBullet(getPosition());
 		bullet.setRadius(10.0f);
-		bullet.setAcceleration(0.0f, 556.0f);
+		bullet.setVelocity(0.0f, 5622.0f);
 	}
 }
