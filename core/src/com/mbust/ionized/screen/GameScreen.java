@@ -10,13 +10,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.mbust.ionized.Config;
 import com.mbust.ionized.GameClass;
 import com.mbust.ionized.Utility;
-import com.mbust.ionized.entities.Player;
+import com.mbust.ionized.entity.Player;
+import com.mbust.ionized.level.Level;
 
 public class GameScreen implements Screen {
 	private ShapeRenderer _sr;
 	
 	private GameClass _gameClass;
+	private Level _currentLevel;
 	private Player _player;
+
 	
 	public GameScreen(GameClass gameClass) {
 		_gameClass = gameClass;
@@ -25,6 +28,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		_sr = new ShapeRenderer();
+		_currentLevel = new Level(this);
 		_player = new Player(this);
 		_player.setPosition(Utility.gANPos(0.5f, 0.1f));
 	}
@@ -40,12 +44,15 @@ public class GameScreen implements Screen {
 		_sr.begin(ShapeType.Line);
 		_sr.rect(Config.resolutionWidth / 2 - Config.gameAreaWidth / 2, Config.resolutionHeight / 2 - Config.gameAreaHeight / 2, Config.gameAreaWidth, Config.gameAreaHeight);
 		
-		// Jugador
+		// Render level
+		_sr.setColor(Color.RED);
+		_currentLevel.render(delta);
+		
+		// Render player
+		_sr.setColor(Color.WHITE);
 		_player.render(delta);
 		
 		_sr.end();
-		
-		
 	}
 
 	@Override
@@ -75,5 +82,9 @@ public class GameScreen implements Screen {
 
 	public ShapeRenderer getRenderer() {
 		return _sr;
+	}
+	
+	public Level getCurrentLevel() {
+		return _currentLevel;
 	}
 }

@@ -1,4 +1,4 @@
-package com.mbust.ionized.entities;
+package com.mbust.ionized.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

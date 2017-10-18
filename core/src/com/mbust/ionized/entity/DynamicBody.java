@@ -1,4 +1,4 @@
-package com.mbust.ionized.entities;
+package com.mbust.ionized.entity;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
@@ -50,6 +50,15 @@ public class DynamicBody {
 		if (futurePos.y + _hitCircle.radius >= Config.gameAreaHeight) futurePos.y = Config.gameAreaHeight - _hitCircle.radius;
 		return futurePos;
 	}
+	
+	public boolean isOutOfScreen() {
+		// Check for collision with the game area boundaries
+		if (_position.x - _hitCircle.radius <= 0) return true;
+		if (_position.y - _hitCircle.radius <= 0) return true;
+		if (_position.x + _hitCircle.radius >= Config.gameAreaWidth) return true;
+		if (_position.y + _hitCircle.radius >= Config.gameAreaHeight) return true;
+		return false;
+	}
 
 	public Vector2 getPosition() {
 		return _position;
@@ -57,6 +66,10 @@ public class DynamicBody {
 	
 	public void setPosition(Vector2 position) {
 		_position = position;
+	}
+	
+	public void setPosition(float x, float y) {
+		_position.set(x, y);
 	}
 	
 	public Vector2 getDisplacement() {

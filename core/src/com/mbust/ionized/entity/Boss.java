@@ -1,4 +1,4 @@
-package com.mbust.ionized.entities;
+package com.mbust.ionized.entity;
 
 public class Boss {
 

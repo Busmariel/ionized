@@ -1,4 +1,4 @@
-package com.mbust.ionized.entities;
+package com.mbust.ionized.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -23,7 +23,7 @@ public class Player extends Character {
 		_playerController.update();
 		
 		_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, Config.playerBoundingRadius);
-		_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, Config.playerHitRadius);
+		_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, getHitCircle().radius);
 	}
 
 	// Input events
@@ -48,6 +48,6 @@ public class Player extends Character {
 	}
 
 	public void onInputShoot() { 
-	
+		_gameScreen().getCurrentLevel()
 	}
 }
