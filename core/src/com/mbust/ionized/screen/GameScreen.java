@@ -19,7 +19,10 @@ public class GameScreen implements Screen {
 	private GameClass _gameClass;
 	private Level _currentLevel;
 	private Player _player;
-	private long _time;
+	
+	private float _time = 0;
+	private float _tick = 1 / 30f;
+	private int _maxUpdatesPerFrame = 5;
 
 	
 	public GameScreen(GameClass gameClass) {
@@ -32,11 +35,20 @@ public class GameScreen implements Screen {
 		_currentLevel = new Level(this);
 		_player = new Player(this);
 		_player.setPosition(Utility.gANPos(0.5f, 0.1f));
-		_time = 0;
 	}
 
 	@Override
 	public void render(float delta) {
+		_time += delta;
+	    int updatesThisFrame = 0;
+	    while (_time >= _tick && updatesThisFrame < _maxUpdatesPerFrame) {
+	        update(delta);
+	        updatesThisFrame++;
+	        _time -= _tick;
+	    }
+	}
+	
+	public void update(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		_time++;
@@ -90,7 +102,7 @@ public class GameScreen implements Screen {
 		return _currentLevel;
 	}
 	
-	public long getTime() {
+	public float getTime() {
 		return _time;
 	}
 }
