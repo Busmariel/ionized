@@ -3,14 +3,18 @@ package com.mbust.ionized.level;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import com.mbust.ionized.Utility;
+import com.mbust.ionized.entity.Player;
 import com.mbust.ionized.entity.bullet.Bullet;
 import com.mbust.ionized.screen.GameScreen;
 
 public class Level {
 	
 	private GameScreen _gameScreen;
+	private Player _player;
 	
 	private final Array<Bullet> _activeBullets = new Array<Bullet>();
+
 	
     private final Pool<Bullet> _bulletPool = new Pool<Bullet>() {
 		@Override
@@ -21,13 +25,25 @@ public class Level {
     
 	public Level(GameScreen gameScreen) {
 		_gameScreen = gameScreen;
+		_player = new Player(gameScreen);
+		_player.setPosition(Utility.gANPos(0.5f, 0.1f));
 	}
 	
+	// Update logic
 	public void update(float delta) {
 		// free dead bullets, TODO: trigger
 		freeDeadBullets();
+		_player.update(delta);
 		for (Bullet bullet : _activeBullets) {
 			bullet.update(delta);
+		}
+	}
+	
+	// Draw graphics
+	public void draw() {
+		_player.draw();
+		for (Bullet bullet : _activeBullets) {
+			bullet.draw();
 		}
 	}
 	

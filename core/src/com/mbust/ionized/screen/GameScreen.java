@@ -23,7 +23,6 @@ public class GameScreen implements Screen {
 	
 	private GameClass _gameClass;
 	private Level _currentLevel;
-	private Player _player;
 	
 	private float _time = 0;
 	private float _tick = 1 / 30f;
@@ -40,11 +39,7 @@ public class GameScreen implements Screen {
 		_sr = new ShapeRenderer();
 		_sb = new SpriteBatch();
 		_currentLevel = new Level(this);
-		_player = new Player(this);
-		_player.setPosition(Utility.gANPos(0.5f, 0.1f));
-		
 		_scoreFont = Utility.generateBitmapFont();
-
 	}
 
 	@Override
@@ -56,17 +51,15 @@ public class GameScreen implements Screen {
 	        updatesThisFrame++;
 	        _time -= _tick;
 	    }
-	    
-	    
+	    draw();
 	}
 	
-	public void update(float delta) {
-
-		_time++;
+	// Draw graphics
+	public void draw() {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-	    //     Draw screen text
+	    // Screen text
 	    _sb.begin();
 	    _scoreFont.draw(_sb, "FPS: " + Gdx.graphics.getFramesPerSecond(), 8, Config.resolutionHeight - 8);
 	    _scoreFont.draw(_sb, "Bullets: " + _currentLevel.getBulletCount(), 8, Config.resolutionHeight - 16);
@@ -75,19 +68,20 @@ public class GameScreen implements Screen {
 	    
 		_sr.setColor(Color.WHITE);
 		
-		// Rectangulo del area de juego
+		// Game area rectangle
 		_sr.begin(ShapeType.Line);
 		_sr.rect(Config.resolutionWidth / 2 - Config.gameAreaWidth / 2, Config.resolutionHeight / 2 - Config.gameAreaHeight / 2, Config.gameAreaWidth, Config.gameAreaHeight);
 		
-		// Render level
+		// Draw level
 		_sr.setColor(Color.RED);
-		_currentLevel.update(delta);
-		
-		// Render player
-		_sr.setColor(Color.WHITE);
-		_player.update(delta);
+		_currentLevel.draw();
 		
 		_sr.end();
+	}
+	
+	public void update(float delta) {
+		_time++;
+		_currentLevel.update(delta);
 	}
 
 	@Override

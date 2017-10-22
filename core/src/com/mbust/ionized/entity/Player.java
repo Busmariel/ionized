@@ -1,6 +1,7 @@
 package com.mbust.ionized.entity;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.mbust.ionized.Config;
 import com.mbust.ionized.Utility;
@@ -24,8 +25,8 @@ public class Player extends Character {
 		_fireDelay = Config.playerStartingFireDelay;
 	}
 	
+	// Update logic
 	public void update(float delta) {
-		// Update the logic.
 		super.update(delta);
 		_playerController.update();
 		
@@ -38,8 +39,12 @@ public class Player extends Character {
 				_fireCounter = 0;
 			}
 		}
+	}
+	
+	// Draw graphics
+	public void draw() {
+		_gameScreen.getRenderer().setColor(Color.WHITE);
 		
-		// Render the graphics.
 		_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, Config.playerBoundingRadius);
 		_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, getHitCircle().radius);
 	}

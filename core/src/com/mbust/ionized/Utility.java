@@ -14,7 +14,7 @@ public final class Utility {
 	private static FreeTypeFontGenerator generator;
 	private static FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 
-	// Placeholder font generator.
+	// Placeholder font generator
 	public static BitmapFont generateBitmapFont() {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/ARLRDBD.TTF"));
 		parameter.size = 12;

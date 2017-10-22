@@ -11,9 +11,7 @@ public class Bullet extends DynamicBody implements Poolable {
 	private boolean _alive;
 	
 	public Bullet(GameScreen gameScreen) {
-		//super(position, radius);
 		_gameScreen = gameScreen;
-	
 		_alive = false;
 	}
 	
@@ -24,15 +22,16 @@ public class Bullet extends DynamicBody implements Poolable {
 		setBoundariesCollision(false);
 	}
 
-	
+	// Update logic
 	public void update(float delta) {
-		// Update the logic.
 		super.update(delta);
 		if (isOutOfScreen()) {
 			_alive = false;
 		}
-		
-		// Render the graphics.
+	}
+	
+	// Draw graphics
+	public void draw() {
 		_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, getHitCircle().radius);
 	}
 
