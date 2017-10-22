@@ -23,11 +23,11 @@ public class Level {
 		_gameScreen = gameScreen;
 	}
 	
-	public void render(float delta) {
+	public void update(float delta) {
 		// free dead bullets, TODO: trigger
 		freeDeadBullets();
 		for (Bullet bullet : _activeBullets) {
-			bullet.render(delta);
+			bullet.update(delta);
 		}
 	}
 	
@@ -52,5 +52,9 @@ public class Level {
     	        _bulletPool.free(item);
     	    }
     	}
+	}
+	
+	public int getBulletCount() {
+		return _activeBullets.size;
 	}
 }

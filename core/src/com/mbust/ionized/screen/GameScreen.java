@@ -4,6 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -15,6 +19,7 @@ import com.mbust.ionized.level.Level;
 
 public class GameScreen implements Screen {
 	private ShapeRenderer _sr;
+	private SpriteBatch _sb;
 	
 	private GameClass _gameClass;
 	private Level _currentLevel;
@@ -23,6 +28,7 @@ public class GameScreen implements Screen {
 	private float _time = 0;
 	private float _tick = 1 / 30f;
 	private int _maxUpdatesPerFrame = 5;
+	private BitmapFont _scoreFont;
 
 	
 	public GameScreen(GameClass gameClass) {
@@ -32,9 +38,13 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		_sr = new ShapeRenderer();
+		_sb = new SpriteBatch();
 		_currentLevel = new Level(this);
 		_player = new Player(this);
 		_player.setPosition(Utility.gANPos(0.5f, 0.1f));
+		
+		_scoreFont = Utility.generateBitmapFont();
+
 	}
 
 	@Override
@@ -46,12 +56,23 @@ public class GameScreen implements Screen {
 	        updatesThisFrame++;
 	        _time -= _tick;
 	    }
+	    
+	    
 	}
 	
 	public void update(float delta) {
+
+		_time++;
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		_time++;
+		
+	    //     Draw screen text
+	    _sb.begin();
+	    _scoreFont.draw(_sb, "FPS: " + Gdx.graphics.getFramesPerSecond(), 8, Config.resolutionHeight - 8);
+	    _scoreFont.draw(_sb, "Bullets: " + _currentLevel.getBulletCount(), 8, Config.resolutionHeight - 16);
+	    _sb.end();
+	    
+	    
 		_sr.setColor(Color.WHITE);
 		
 		// Rectangulo del area de juego
@@ -60,11 +81,11 @@ public class GameScreen implements Screen {
 		
 		// Render level
 		_sr.setColor(Color.RED);
-		_currentLevel.render(delta);
+		_currentLevel.update(delta);
 		
 		// Render player
 		_sr.setColor(Color.WHITE);
-		_player.render(delta);
+		_player.update(delta);
 		
 		_sr.end();
 	}

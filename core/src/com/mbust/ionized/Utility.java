@@ -1,18 +1,33 @@
 package com.mbust.ionized;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public final class Utility {
-	public AssetManager _assetManager = new AssetManager();
+	private static AssetManager _assetManager = new AssetManager();
+	private static FreeTypeFontGenerator generator;
+	private static FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+
+	// Placeholder font generator.
+	public static BitmapFont generateBitmapFont() {
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/ARLRDBD.TTF"));
+		parameter.size = 12;
+		BitmapFont font = generator.generateFont(parameter);
+		generator.dispose();
+		return font;
+	}
 	
-	public void loadCharacterTexture(String name) {
+	public static void loadCharacterTexture(String name) {
 		_assetManager.load("character/" + name + ".png", Texture.class);
 	}
 	
-	public void loadEffectsTexture(String name) {
+	public static void loadEffectsTexture(String name) {
 		_assetManager.load("effects/" + name + ".png", Texture.class);
 	}
 	

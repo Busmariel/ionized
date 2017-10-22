@@ -11,4 +11,5 @@ public class Config {
 	public static float playerConstSpeed = 256;
 	public static float playerBoundingRadius = 16.0f;
 	public static float playerHitRadius = 4.0f;
+	public static float playerStartingFireDelay = 0.5f;
 }

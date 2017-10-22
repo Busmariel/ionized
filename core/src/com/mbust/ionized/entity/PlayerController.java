@@ -31,20 +31,21 @@ public class PlayerController implements InputProcessor {
 			inputs++;
 		}
 		_player.onInputDirection(dir, inputs);
-
-		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-			_player.onInputShoot();
-		}
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
+		if (keycode == Input.Keys.SPACE) {
+			_player.setFiringState(true);
+		}
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-
+		if (keycode == Input.Keys.SPACE) {
+			_player.setFiringState(false);
+		}
 		return false;
 	}
 

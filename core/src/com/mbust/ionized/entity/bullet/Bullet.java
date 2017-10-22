@@ -25,12 +25,15 @@ public class Bullet extends DynamicBody implements Poolable {
 	}
 
 	
-	public void render(float delta) {
+	public void update(float delta) {
+		// Update the logic.
 		super.update(delta);
-		_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, getHitCircle().radius);
 		if (isOutOfScreen()) {
 			_alive = false;
 		}
+		
+		// Render the graphics.
+		_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, getHitCircle().radius);
 	}
 
 	@Override
