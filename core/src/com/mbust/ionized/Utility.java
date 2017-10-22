@@ -2,12 +2,16 @@ package com.mbust.ionized;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.mbust.ionized.level.Level;
 
 public final class Utility {
 	private static AssetManager _assetManager = new AssetManager();
@@ -17,7 +21,7 @@ public final class Utility {
 	// Placeholder font generator
 	public static BitmapFont generateBitmapFont() {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/ARLRDBD.TTF"));
-		parameter.size = 12;
+		parameter.size = 10;
 		BitmapFont font = generator.generateFont(parameter);
 		generator.dispose();
 		return font;

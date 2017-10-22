@@ -1,11 +1,19 @@
 package com.mbust.ionized.level;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pools;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mbust.ionized.Utility;
 import com.mbust.ionized.entity.Player;
 import com.mbust.ionized.entity.bullet.Bullet;
+import com.mbust.ionized.entity.enemy.Enemy;
+import com.mbust.ionized.entity.enemy.EnemyInterface;
+import com.mbust.ionized.entity.enemy.scripts.Enemy00;
 import com.mbust.ionized.screen.GameScreen;
 
 public class Level {
@@ -14,19 +22,33 @@ public class Level {
 	private Player _player;
 	
 	private final Array<Bullet> _activeBullets = new Array<Bullet>();
-
+	private final Pool<Bullet> _bulletPool = Pools.get(Bullet.class);
+    
+	private final Array<Enemy> _activeEnemies = new Array<Enemy>();
+	private final Pool<Enemy> _enemyPool = Pools.get(Enemy.class);
+    
+	// TODO
+	public static Level loadFromFile() {
+		FileHandle file = Gdx.files.internal("level.txt");
+		Gson gson = new Gson();
+		return gson.fromJson(file.readString(), Level.class);
+	}
 	
-    private final Pool<Bullet> _bulletPool = new Pool<Bullet>() {
-		@Override
-		protected Bullet newObject() {
-			return new Bullet(_gameScreen);
-		}
-    };
+	// TODO
+	public static void saveToFile(Level level) {
+		GsonBuilder builder = new GsonBuilder();
+		Gson gson = builder.create();
+		FileHandle file = Gdx.files.local("level.txt");
+		file.writeString(gson.toJson(level), false);
+	}
+	
     
 	public Level(GameScreen gameScreen) {
 		_gameScreen = gameScreen;
 		_player = new Player(gameScreen);
 		_player.setPosition(Utility.gANPos(0.5f, 0.1f));
+		
+		spawnEnemy(new Vector2(400, 400));
 	}
 	
 	// Update logic
@@ -48,10 +70,10 @@ public class Level {
 	}
 	
 	public Bullet spawnBullet(Vector2 origin) {
-        Bullet item = _bulletPool.obtain();
-        item.init(origin.x, origin.y);
-        _activeBullets.add(item);
-		return item;
+        Bullet bullet = _bulletPool.obtain();
+        bullet.init(origin.x, origin.y);
+        _activeBullets.add(bullet);
+		return bullet;
 	}
 	
 	public Bullet spawnBullet(float x, float y) {
@@ -59,13 +81,33 @@ public class Level {
 	}
 	
 	public void freeDeadBullets() {
-    	Bullet item;
-    	int len = _activeBullets.size;
-    	for (int i = len; --i >= 0;) {
-    	    item = _activeBullets.get(i);
-    	    if (!item.isAlive()) {
+    	Bullet bullet;
+    	int size = _activeBullets.size;
+    	for (int i = size; --i >= 0;) {
+    		bullet = _activeBullets.get(i);
+    	    if (!bullet.isAlive()) {
     	    	_activeBullets.removeIndex(i);
-    	        _bulletPool.free(item);
+    	        _bulletPool.free(bullet);
+    	    }
+    	}
+	}
+	
+	public Enemy spawnEnemy(Vector2 position) {
+        Enemy enemy = _enemyPool.obtain();
+        enemy.init(_gameScreen);
+        enemy.setPosition(position);
+        _activeEnemies.add(enemy);
+		return enemy;
+	}
+	
+	public void freeDeadEnemies() {
+    	Enemy enemy;
+    	int size = _activeEnemies.size;
+    	for (int i = size; --i >= 0;) {
+    		enemy = _activeEnemies.get(i);
+    	    if (!enemy.isAlive()) {
+    	    	_activeEnemies.removeIndex(i);
+    	        _enemyPool.free(enemy);
     	    }
     	}
 	}

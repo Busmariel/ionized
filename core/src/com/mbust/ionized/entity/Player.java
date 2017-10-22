@@ -48,6 +48,13 @@ public class Player extends Character {
 		_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, Config.playerBoundingRadius);
 		_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, getHitCircle().radius);
 	}
+	
+	// Kills the player
+	public void end() {
+		
+	}
+	
+	// ------------------------------------------------
 
 	// Input events
 	public void onInputDirection(boolean[] dir, int inputs) {  

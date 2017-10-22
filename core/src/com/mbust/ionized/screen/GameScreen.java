@@ -28,7 +28,6 @@ public class GameScreen implements Screen {
 	private float _tick = 1 / 30f;
 	private int _maxUpdatesPerFrame = 5;
 	private BitmapFont _scoreFont;
-
 	
 	public GameScreen(GameClass gameClass) {
 		_gameClass = gameClass;
