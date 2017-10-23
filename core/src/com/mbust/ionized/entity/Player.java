@@ -38,7 +38,7 @@ public class Player extends DynamicBody {
 			if (_fireCounter >= _fireDelay) {
 				Bullet bullet = _gameScreen.getCurrentLevel().spawnBullet(getPosition());
 				bullet.setRadius(10.0f);
-				bullet.setVelocity(0.0f, 520.0f);
+				bullet.setVelocity(0.0f, 20.0f);
 				_fireCounter = 0;
 			}
 		}
