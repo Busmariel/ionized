@@ -28,8 +28,6 @@ public class GameScreen implements Screen {
 
 	private BitmapFont _scoreFont;
 
-	private int _nextTick = 0;
-	
 	public GameScreen(GameClass gameClass) {
 		_gameClass = gameClass;
 	}
@@ -45,14 +43,9 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-	    int updatesThisFrame = 0;
-	    while (Gdx.graphics.getFrameId() >= _nextTick && updatesThisFrame < Config.MAX_FRAMESKIP) {
-	    	update(delta);
-	        updatesThisFrame++;
-	        _nextTick += Config.SKIP_TICKS;
-	    }
+
+	    update(delta);
 	   
-	    float alpha = (Gdx.graphics.getFrameId() + Config.SKIP_TICKS - _nextTick) / Config.SKIP_TICKS;
 
 	    draw();
 	}

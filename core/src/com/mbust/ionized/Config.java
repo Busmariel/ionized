@@ -12,8 +12,8 @@ public class Config {
 	public static int gameAreaWidth = 600;
 	public static int gameAreaHeight = 800;
 	
-	public static float playerConstSpeed = 5;
+	public static float playerConstSpeed = 500;
 	public static float playerBoundingRadius = 16.0f;
 	public static float playerHitRadius = 4.0f;
-	public static float playerStartingFireDelay = 0.00005f;
+	public static float playerStartingFireDelay = 0.05f;
 }

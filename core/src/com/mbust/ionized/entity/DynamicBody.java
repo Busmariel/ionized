@@ -37,10 +37,10 @@ public class DynamicBody {
 		Vector2 futurePos = _position.cpy();
 
 		if (_movementType == MovementType.MOVEMENT_DYNAMIC) {
-			_velocity.add(_acceleration);
-			futurePos.add(_velocity);
+			_velocity.add(_acceleration.cpy().scl(delta));
+			futurePos.add(_velocity.cpy().scl(delta));
 		} else if (_movementType == MovementType.MOVEMENT_CONSTANT) {
-			futurePos.add(_constDirection.nor().scl(_constSpeed));
+			futurePos.add(_constDirection.nor().scl(_constSpeed * delta));
 		} else if (_movementType == MovementType.MOVEMENT_DISPLACEMENT) {
 			futurePos.add(_displacement);
 		}
