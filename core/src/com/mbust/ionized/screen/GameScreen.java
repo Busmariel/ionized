@@ -2,8 +2,10 @@ package com.mbust.ionized.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -23,11 +25,10 @@ public class GameScreen implements Screen {
 	
 	private GameClass _gameClass;
 	private Level _currentLevel;
-	
-	private float _time = 0;
-	private float _tick = 1 / 30f;
-	private int _maxUpdatesPerFrame = 5;
+
 	private BitmapFont _scoreFont;
+
+	private int _nextTick = 0;
 	
 	public GameScreen(GameClass gameClass) {
 		_gameClass = gameClass;
@@ -39,29 +40,35 @@ public class GameScreen implements Screen {
 		_sb = new SpriteBatch();
 		_currentLevel = new Level(this);
 		_scoreFont = Utility.generateBitmapFont();
+		
 	}
 
 	@Override
 	public void render(float delta) {
-		_time += delta;
 	    int updatesThisFrame = 0;
-	    while (_time >= _tick && updatesThisFrame < _maxUpdatesPerFrame) {
-	        update(delta);
+	    while (Gdx.graphics.getFrameId() >= _nextTick && updatesThisFrame < Config.MAX_FRAMESKIP) {
+	    	update(delta);
 	        updatesThisFrame++;
-	        _time -= _tick;
+	        _nextTick += Config.SKIP_TICKS;
 	    }
+	   
+	    float alpha = (Gdx.graphics.getFrameId() + Config.SKIP_TICKS - _nextTick) / Config.SKIP_TICKS;
+
 	    draw();
 	}
 	
-	// Draw graphics
+	// Draw graphics and interpolate
 	public void draw() {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 	    // Screen text
 	    _sb.begin();
+	    _currentLevel.draw();
 	    _scoreFont.draw(_sb, "FPS: " + Gdx.graphics.getFramesPerSecond(), 8, Config.resolutionHeight - 8);
 	    _scoreFont.draw(_sb, "Bullets: " + _currentLevel.getBulletCount(), 8, Config.resolutionHeight - 16);
+	    
+	    //getRenderer().draw(getAssetManager().get("bullet/bullet1.png", Texture.class), Utility.gAOrigin().x - getAssetManager().get("bullet/bullet1.png", Texture.class).getWidth() / 2, Utility.gAOrigin().y - getAssetManager().get("bullet/bullet1.png", Texture.class).getHeight() / 2);
 	    _sb.end();
 	    
 	    
@@ -70,16 +77,10 @@ public class GameScreen implements Screen {
 		// Game area rectangle
 		_sr.begin(ShapeType.Line);
 		_sr.rect(Config.resolutionWidth / 2 - Config.gameAreaWidth / 2, Config.resolutionHeight / 2 - Config.gameAreaHeight / 2, Config.gameAreaWidth, Config.gameAreaHeight);
-		
-		// Draw level
-		_sr.setColor(Color.RED);
-		_currentLevel.draw();
-		
 		_sr.end();
 	}
 	
 	public void update(float delta) {
-		_time++;
 		_currentLevel.update(delta);
 	}
 
@@ -108,15 +109,15 @@ public class GameScreen implements Screen {
 		_sr.dispose();
 	}
 
-	public ShapeRenderer getRenderer() {
-		return _sr;
+	public SpriteBatch getRenderer() {
+		return _sb;
 	}
 	
 	public Level getCurrentLevel() {
 		return _currentLevel;
 	}
-	
-	public float getTime() {
-		return _time;
+
+	public AssetManager getAssetManager() {
+		return _gameClass.getAssetManager();
 	}
 }

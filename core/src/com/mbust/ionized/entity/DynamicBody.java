@@ -35,15 +35,17 @@ public class DynamicBody {
 	
 	public void update(float delta) {
 		Vector2 futurePos = _position.cpy();
+
 		if (_movementType == MovementType.MOVEMENT_DYNAMIC) {
-			_velocity.add(_acceleration.cpy().scl(delta));
-			futurePos.add(_velocity.cpy().scl(delta));
+			_velocity.add(_acceleration);
+			futurePos.add(_velocity);
 		} else if (_movementType == MovementType.MOVEMENT_CONSTANT) {
-			futurePos.add(_constDirection.nor().scl(_constSpeed * delta));
+			futurePos.add(_constDirection.nor().scl(_constSpeed));
 		} else if (_movementType == MovementType.MOVEMENT_DISPLACEMENT) {
 			futurePos.add(_displacement);
 		}
 		
+		// We check for collisions with the boundaries, if it collides, the next position will be right against the wall
 		if (_collidesWithBoundaries) {
 			_position = boundariesCollision(futurePos);
 		} else {
@@ -54,7 +56,6 @@ public class DynamicBody {
 	}
 	
 	public void reset() {
-		_collidesWithBoundaries = true;
 		_hitCircle.radius = 0.0f;
 		_position.setZero();
 		_velocity.setZero();
@@ -63,6 +64,7 @@ public class DynamicBody {
 		_constDirection.setZero();
 		_constSpeed = 0.0f;
 		_angle = 0.0f;
+		_collidesWithBoundaries = true;
 	}
 	
 	private Vector2 boundariesCollision(Vector2 futurePos) {

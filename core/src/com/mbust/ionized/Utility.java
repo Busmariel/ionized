@@ -14,8 +14,7 @@ import com.google.gson.GsonBuilder;
 import com.mbust.ionized.level.Level;
 
 public final class Utility {
-	private static AssetManager _assetManager = new AssetManager();
-	private static FreeTypeFontGenerator generator;
+		private static FreeTypeFontGenerator generator;
 	private static FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 
 	// Placeholder font generator
@@ -25,14 +24,6 @@ public final class Utility {
 		BitmapFont font = generator.generateFont(parameter);
 		generator.dispose();
 		return font;
-	}
-	
-	public static void loadCharacterTexture(String name) {
-		_assetManager.load("character/" + name + ".png", Texture.class);
-	}
-	
-	public static void loadEffectsTexture(String name) {
-		_assetManager.load("effects/" + name + ".png", Texture.class);
 	}
 	
 	public static Vector2 polarToCart(float dist, float degrees) {

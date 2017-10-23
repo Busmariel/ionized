@@ -12,7 +12,7 @@ public class DesktopLauncher {
 		config.height = Config.resolutionHeight;
 		config.foregroundFPS = 0;
 		config.vSyncEnabled = false;
-		config.samples = 16;
+		//config.samples = 16;
 		new LwjglApplication(new GameClass(), config);
 	}
 }

@@ -1,5 +1,6 @@
 package com.mbust.ionized.entity.bullet;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.mbust.ionized.Utility;
 import com.mbust.ionized.entity.DynamicBody;
@@ -9,13 +10,14 @@ public class Bullet extends DynamicBody implements Poolable {
 	
 	private GameScreen _gameScreen;
 	private boolean _alive;
+	private Texture _texture;
 	
-	public Bullet(GameScreen gameScreen) {
-		_gameScreen = gameScreen;
+	public Bullet() {
 		_alive = false;
 	}
 	
-	public void init(float x, float y) {
+	public void init(GameScreen gameScreen, float x, float y) {
+		_gameScreen = gameScreen;
 		setPosition(x, y);
 		_alive = true;
 		setMovementType(MovementType.MOVEMENT_DYNAMIC);
@@ -32,12 +34,15 @@ public class Bullet extends DynamicBody implements Poolable {
 	
 	// Draw graphics
 	public void draw() {
-		_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, getHitCircle().radius);
+		if (_texture != null) {
+			_gameScreen.getRenderer().draw(_texture, Utility.gAOrigin().x + getPosition().x - _texture.getWidth() / 2, Utility.gAOrigin().y + getPosition().y - _texture.getHeight() / 2);
+		}
 	}
 
 	@Override
 	public void reset() {
 		super.reset();
+		_texture = null;
 	}
 	
 	public boolean isAlive() {
@@ -46,5 +51,9 @@ public class Bullet extends DynamicBody implements Poolable {
 	
 	public void setRadius(float radius) {
 		getHitCircle().radius = radius;
+	}
+	
+	public void setTexture(String path) {
+		_texture = _gameScreen.getAssetManager().get(path, Texture.class);
 	}
 }

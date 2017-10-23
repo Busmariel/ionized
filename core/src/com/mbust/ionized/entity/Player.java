@@ -2,19 +2,22 @@ package com.mbust.ionized.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mbust.ionized.Config;
 import com.mbust.ionized.Utility;
 import com.mbust.ionized.entity.bullet.Bullet;
 import com.mbust.ionized.screen.GameScreen;
 
-public class Player extends Character {
+public class Player extends DynamicBody {
 	private GameScreen _gameScreen;
 	private PlayerController _playerController;
+	private Texture _texture;
 	
 	private boolean _bulletFire;
 	private float _fireDelay, _fireCounter;
-
+	
 	public Player(GameScreen gameScreen) {
 		_gameScreen = gameScreen;
 		_playerController = new PlayerController(this);
@@ -35,7 +38,7 @@ public class Player extends Character {
 			if (_fireCounter >= _fireDelay) {
 				Bullet bullet = _gameScreen.getCurrentLevel().spawnBullet(getPosition());
 				bullet.setRadius(10.0f);
-				bullet.setVelocity(0.0f, 120.0f);
+				bullet.setVelocity(0.0f, 520.0f);
 				_fireCounter = 0;
 			}
 		}
@@ -45,8 +48,12 @@ public class Player extends Character {
 	public void draw() {
 		_gameScreen.getRenderer().setColor(Color.WHITE);
 		
-		_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, Config.playerBoundingRadius);
-		_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, getHitCircle().radius);
+		if (_texture != null) {
+			_gameScreen.getRenderer().draw(_texture, Utility.gAOrigin().x + getPosition().x - _texture.getWidth() / 2, Utility.gAOrigin().y + getPosition().y - _texture.getHeight() / 2);
+		}
+		//System.out.println(getPosition().y);
+		//_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, Config.playerBoundingRadius);
+		//_gameScreen.getRenderer().circle(Utility.gAOrigin().x + getPosition().x, Utility.gAOrigin().y + getPosition().y, getHitCircle().radius);
 	}
 	
 	// Kills the player
@@ -79,5 +86,9 @@ public class Player extends Character {
 
 	public void setFiringState(boolean value) { 
 		_bulletFire = value;
+	}
+	
+	public void setTexture(String path) {
+		_texture = _gameScreen.getAssetManager().get(path, Texture.class);
 	}
 }
