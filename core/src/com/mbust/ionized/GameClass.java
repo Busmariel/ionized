@@ -7,18 +7,22 @@ import com.mbust.ionized.screen.GameScreen;
 import com.mbust.ionized.screen.MenuScreen;
 
 public class GameClass extends Game {
-	private AssetManager _assetManager = new AssetManager();
-	private MenuScreen _menuScreen = new MenuScreen(this);
-	private GameScreen _gameScreen = new GameScreen(this);
+	private AssetManager _assetManager;
+	private MenuScreen _menuScreen;
+	private GameScreen _gameScreen;
 	
 	private boolean _loadingComplete = false;
 	
 	@Override
 	public void create () {
-
+		_assetManager = new AssetManager();
+		_menuScreen = new MenuScreen(this);
+		_gameScreen	= new GameScreen(this);
+		
 		// We load the assets needed for the level.
 		_gameScreen.getAssetManager().load("enemy/drone1.png", Texture.class);
 		_gameScreen.getAssetManager().load("bullet/bullet1.png", Texture.class);
+		_gameScreen.getAssetManager().load("bullet/bullet_anim_1.png", Texture.class);
 		_gameScreen.getAssetManager().load("player/player.png", Texture.class);
 	}
 
@@ -29,7 +33,6 @@ public class GameClass extends Game {
 			setScreen(_gameScreen);
 			_loadingComplete = true;
 		}
-
 	}
 	
 	@Override

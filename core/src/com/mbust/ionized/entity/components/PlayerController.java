@@ -1,8 +1,9 @@
-package com.mbust.ionized.entity;
+package com.mbust.ionized.entity.components;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.mbust.ionized.entity.player.Player;
 
 public class PlayerController implements InputProcessor {
 	private Player _player;

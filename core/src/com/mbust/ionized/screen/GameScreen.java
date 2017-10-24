@@ -16,7 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mbust.ionized.Config;
 import com.mbust.ionized.GameClass;
 import com.mbust.ionized.Utility;
-import com.mbust.ionized.entity.Player;
+import com.mbust.ionized.entity.player.Player;
 import com.mbust.ionized.level.Level;
 
 public class GameScreen implements Screen {
@@ -38,15 +38,11 @@ public class GameScreen implements Screen {
 		_sb = new SpriteBatch();
 		_currentLevel = new Level(this);
 		_scoreFont = Utility.generateBitmapFont();
-		
 	}
 
 	@Override
 	public void render(float delta) {
-
 	    update(delta);
-	   
-
 	    draw();
 	}
 	
@@ -57,7 +53,7 @@ public class GameScreen implements Screen {
 		
 	    // Screen text
 	    _sb.begin();
-	    _currentLevel.draw();
+	    _currentLevel.draw(_sb);
 	    _scoreFont.draw(_sb, "FPS: " + Gdx.graphics.getFramesPerSecond(), 8, Config.resolutionHeight - 8);
 	    _scoreFont.draw(_sb, "Bullets: " + _currentLevel.getBulletCount(), 8, Config.resolutionHeight - 16);
 	    
@@ -102,10 +98,6 @@ public class GameScreen implements Screen {
 		_sr.dispose();
 	}
 
-	public SpriteBatch getRenderer() {
-		return _sb;
-	}
-	
 	public Level getCurrentLevel() {
 		return _currentLevel;
 	}

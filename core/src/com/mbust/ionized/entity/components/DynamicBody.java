@@ -1,4 +1,4 @@
-package com.mbust.ionized.entity;
+package com.mbust.ionized.entity.components;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
@@ -12,25 +12,26 @@ public class DynamicBody {
 	public class MovementType {
 		public static final int MOVEMENT_DYNAMIC = 0, MOVEMENT_CONSTANT = 1, MOVEMENT_DISPLACEMENT = 2;
 	}
-	private int _movementType;
-	private Vector2 _position, _velocity, _acceleration, _displacement, _constDirection;
-	private Circle _hitCircle;
-	private float _angle, _constSpeed;
-	private boolean _collidesWithBoundaries;
+	
+	private int 		_movementType;
+	private Vector2 	_position, _velocity, _acceleration, _displacement, _constDirection;
+	private Circle 		_hitCircle;
+	private float 		_angle, _constSpeed;
+	private boolean 	_collidesWithBoundaries;
 
 	// arreglar deltas velocidades c
 	
 	public DynamicBody() {
-		_movementType = MovementType.MOVEMENT_DYNAMIC;
-		_hitCircle = new Circle();
-		_position = new Vector2();
-		_velocity = new Vector2();
-		_acceleration = new Vector2();
-		_displacement = new Vector2();
-		_constDirection = new Vector2();
-		_constSpeed = 0.0f;
-		_angle = 0.0f;
-		_collidesWithBoundaries = true;
+		_movementType 				= MovementType.MOVEMENT_DYNAMIC;
+		_hitCircle 					= new Circle();
+		_position 					= new Vector2();
+		_velocity 					= new Vector2();
+		_acceleration 				= new Vector2();
+		_displacement 				= new Vector2();
+		_constDirection 			= new Vector2();
+		_constSpeed 				= 0.0f;
+		_angle 						= 0.0f;
+		_collidesWithBoundaries 	= true;
 	}
 	
 	public void update(float delta) {

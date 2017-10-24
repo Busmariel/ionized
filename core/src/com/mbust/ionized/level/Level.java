@@ -3,6 +3,7 @@ package com.mbust.ionized.level;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
@@ -12,11 +13,11 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mbust.ionized.Utility;
-import com.mbust.ionized.entity.Player;
 import com.mbust.ionized.entity.bullet.Bullet;
 import com.mbust.ionized.entity.enemy.Enemy;
 import com.mbust.ionized.entity.enemy.EnemyBehavior;
 import com.mbust.ionized.entity.enemy.behaviors.EBDrone1;
+import com.mbust.ionized.entity.player.Player;
 import com.mbust.ionized.screen.GameScreen;
 
 public class Level {
@@ -50,13 +51,15 @@ public class Level {
 	public Level(GameScreen gameScreen) {
 		_gameScreen = gameScreen;
 		_player = new Player(gameScreen);
-		_player.setPosition(Utility.gANPos(0.5f, 0.1f));
-		_player.setTexture("player/player.png");
+		_player.getBody().setPosition(Utility.gANPos(0.5f, 0.1f));
+		_player.setTexture(_gameScreen.getAssetManager(), "player/player.png");
+		
 		Timer.schedule(new Task(){
 		    @Override
 		    public void run() {
 		    	Enemy enemy = spawnEnemy(new EBDrone1());
-		    	enemy.setPosition(200, 200);
+		    	enemy.getBody().setPosition(200, 200);
+		    	enemy.setTexture(_gameScreen.getAssetManager(), "enemy/drone1.png");
 		    }
 		}, 5);
 		//Enemy enemy = spawnEnemy(new EBDrone1());
@@ -64,7 +67,8 @@ public class Level {
 		    @Override
 		    public void run() {
 		    	Enemy enemy = spawnEnemy(new EBDrone1());
-		    	enemy.setPosition(200, 200);
+		    	enemy.getBody().setPosition(200, 200);
+		    	enemy.setTexture(_gameScreen.getAssetManager(), "enemy/drone1.png");
 		    }
 		}, 6);
 	}
@@ -88,20 +92,19 @@ public class Level {
 	}
 	
 	// Draw graphics
-	public void draw() {
+	public void draw(SpriteBatch sb) {
 		for (Bullet bullet : _activeBullets) {
-			bullet.draw();
+			bullet.draw(sb);
 		}
 		for (Enemy enemy : _activeEnemies) {
-			enemy.draw();
+			enemy.draw(sb);
 		}
-		_player.draw();
+		_player.draw(sb);
 	}
 	
 	public Bullet spawnBullet(Vector2 origin) {
         Bullet bullet = _bulletPool.obtain();
         bullet.init(_gameScreen, origin.x, origin.y);
-        bullet.setTexture("bullet/bullet1.png");
         _activeBullets.add(bullet);
 		return bullet;
 	}
