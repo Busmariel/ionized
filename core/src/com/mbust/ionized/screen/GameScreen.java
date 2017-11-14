@@ -2,22 +2,32 @@ package com.mbust.ionized.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.mbust.ionized.Config;
 import com.mbust.ionized.GameClass;
 import com.mbust.ionized.Utility;
-import com.mbust.ionized.entities.Player;
+import com.mbust.ionized.entity.player.Player;
+import com.mbust.ionized.level.Level;
 
 public class GameScreen implements Screen {
 	private ShapeRenderer _sr;
+	private SpriteBatch _sb;
 	
 	private GameClass _gameClass;
-	private Player _player;
-	
+	private Level _currentLevel;
+
+	private BitmapFont _scoreFont;
+
 	public GameScreen(GameClass gameClass) {
 		_gameClass = gameClass;
 	}
@@ -25,27 +35,42 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		_sr = new ShapeRenderer();
-		_player = new Player(this);
-		_player.setPosition(Utility.gANPos(0.5f, 0.1f));
+		_sb = new SpriteBatch();
+		_currentLevel = new Level(this);
+		_scoreFont = Utility.generateBitmapFont();
 	}
 
 	@Override
 	public void render(float delta) {
+	    update(delta);
+	    draw();
+	}
+	
+	// Draw graphics and interpolate
+	public void draw() {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+	    // Screen text
+	    _sb.begin();
+	    _currentLevel.draw(_sb);
+	    _scoreFont.draw(_sb, "FPS: " + Gdx.graphics.getFramesPerSecond(), 8, Config.resolutionHeight - 8);
+	    _scoreFont.draw(_sb, "Bullets: " + _currentLevel.getBulletCount(), 8, Config.resolutionHeight - 16);
+	    
+	    //getRenderer().draw(getAssetManager().get("bullet/bullet1.png", Texture.class), Utility.gAOrigin().x - getAssetManager().get("bullet/bullet1.png", Texture.class).getWidth() / 2, Utility.gAOrigin().y - getAssetManager().get("bullet/bullet1.png", Texture.class).getHeight() / 2);
+	    _sb.end();
+	    
+	    
 		_sr.setColor(Color.WHITE);
 		
-		// Rectangulo del area de juego
+		// Game area rectangle
 		_sr.begin(ShapeType.Line);
 		_sr.rect(Config.resolutionWidth / 2 - Config.gameAreaWidth / 2, Config.resolutionHeight / 2 - Config.gameAreaHeight / 2, Config.gameAreaWidth, Config.gameAreaHeight);
-		
-		// Jugador
-		_player.render(delta);
-		
 		_sr.end();
-		
-		
+	}
+	
+	public void update(float delta) {
+		_currentLevel.update(delta);
 	}
 
 	@Override
@@ -73,7 +98,11 @@ public class GameScreen implements Screen {
 		_sr.dispose();
 	}
 
-	public ShapeRenderer getRenderer() {
-		return _sr;
+	public Level getCurrentLevel() {
+		return _currentLevel;
+	}
+
+	public AssetManager getAssetManager() {
+		return _gameClass.getAssetManager();
 	}
 }

@@ -1,19 +1,29 @@
 package com.mbust.ionized;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.mbust.ionized.level.Level;
 
 public final class Utility {
-	public AssetManager _assetManager = new AssetManager();
-	
-	public void loadCharacterTexture(String name) {
-		_assetManager.load("character/" + name + ".png", Texture.class);
-	}
-	
-	public void loadEffectsTexture(String name) {
-		_assetManager.load("effects/" + name + ".png", Texture.class);
+		private static FreeTypeFontGenerator generator;
+	private static FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+
+	// Placeholder font generator
+	public static BitmapFont generateBitmapFont() {
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/ARLRDBD.TTF"));
+		parameter.size = 10;
+		BitmapFont font = generator.generateFont(parameter);
+		generator.dispose();
+		return font;
 	}
 	
 	public static Vector2 polarToCart(float dist, float degrees) {
